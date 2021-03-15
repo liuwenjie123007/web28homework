@@ -5,65 +5,116 @@
     <!-- KForm -->
     <k-form :model="model" :rules="rules" ref="loginForm">
       <k-form-item label="用户名" prop="username">
-        <KInput v-model="model.username" placeholder="请输入用户名"></KInput>  
-      </k-form-item>     
+        <KInput v-model="model.username" placeholder="请输入用户名"></KInput>
+      </k-form-item>
       <k-form-item>
         <button @click="onLogin">登录</button>
       </k-form-item>
-    </k-form> 
+    </k-form>
+
+    <!-- KTable -->
+    <k-table :data="tableData">
+      <k-table-column prop="date" label="日期"></k-table-column>
+      <k-table-column prop="name" label="姓名"></k-table-column>
+      <k-table-column prop="address" label="地址"></k-table-column>
+      <!-- 自定义列模板 -->
+      <k-table-column label="操作">
+        <template v-slot:default="scope">
+          <button @click="handleEdit(scope.$index, scope.row)">编辑</button>
+          <button @click="handlerDelete(scope.$index, scope.row)">删除</button>
+        </template>
+      </k-table-column>
+    </k-table>
+
+    <!-- 排序 -->
+    <k-table :data="tableData">
+      <k-table-column sortable prop="date" label="日期"></k-table-column>
+      <k-table-column sortable prop="name" label="姓名"></k-table-column>
+      <k-table-column prop="address" label="地址"></k-table-column>
+      <k-table-column label="操作">
+        <template v-slot:default="scope">
+          <button @click="handleEdit(scope.$index, scope.row)">编辑</button>
+          <button @click="handlerDelete(scope.$index, scope.row)">删除</button>
+        </template>
+      </k-table-column>
+    </k-table>
   </div>
 </template>
 
 <script>
-import ElementTest from '@/components/form/ElementTest.vue'
-import KInput from '@/components/form/KInput.vue';
-import KFormItem from './KFormItem.vue';
-import KForm from './KForm.vue';
+import ElementTest from "@/components/form/ElementTest.vue";
+import KInput from "@/components/form/KInput.vue";
+import KFormItem from "./KFormItem.vue";
+import KForm from "./KForm.vue";
+import KTable from "@/components/form/KTable.vue";
+import KTableColumn from "@/components/form/KTableColumn.vue";
 
-  
-  export default {
-    components: {
-      ElementTest,
-      KInput,
-      KFormItem,
-        KForm,
-    },
-    data() {
-      return {
-        model: {
-          username: 'tom'
+export default {
+  components: {
+    ElementTest,
+    KInput,
+    KFormItem,
+    KForm,
+    KTable,
+    KTableColumn,
+  },
+  data() {
+    return {
+      model: {
+        username: "tom",
+      },
+      rules: {
+        username: [{ required: true, message: "用户名为必填项" }],
+      },
+      tableData: [
+        {
+          date: "2016-05-02",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路1518弄",
         },
-        rules: {
-          username: [{required: true, message: '用户名为必填项'}]
-        }
-      }
+        {
+          date: "2016-05-04",
+          name: "王小二",
+          address: "上海市普陀区金沙江路1517弄",
+        },
+        {
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路1519弄",
+        },
+        {
+          date: "2016-05-03",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路1516弄",
+        },
+      ],
+    };
+  },
+  methods: {
+    onLogin() {
+      this.$refs.loginForm.validate((isValidate) => {
+        this.$notice({
+          title: "社会你杨哥喊你来搬砖",
+          message: isValidate ? "请求登录!" : "校验失败！",
+          duration: 1000,
+        });
+
+        // const notice = create(Notice, {
+        //   title: "社会你杨哥喊你来搬砖",
+        //   message: isValidate ? "请求登录!" : "校验失败！",
+        //   duration: 1000
+        // })
+        // notice.show();
+        // if (isValidate) {
+        //   console.log('submit login');
+        // } else {
+        //   alert('校验失败，请重试')
+        // }
+      });
     },
-    methods: {
-      onLogin() {
-        this.$refs.loginForm.validate(isValidate => {
-          this.$notice({
-            title: "社会你杨哥喊你来搬砖",
-            message: isValidate ? "请求登录!" : "校验失败！",
-            duration: 1000
-          });
-          
-          // const notice = create(Notice, {
-          //   title: "社会你杨哥喊你来搬砖",
-          //   message: isValidate ? "请求登录!" : "校验失败！",
-          //   duration: 1000
-          // })
-          // notice.show();
-          // if (isValidate) {
-          //   console.log('submit login');
-          // } else {
-          //   alert('校验失败，请重试')
-          // }
-        })
-      }
-    }
-  }
+  },
+};
 </script>
 
 <style scoped>
-
 </style>
