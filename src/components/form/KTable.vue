@@ -25,7 +25,9 @@ export default {
   computed: {
     columns() {
       // 由于不一定有prop属性，内部如果出现了默认作用域插槽， 则就按照它来执行渲染
-      return this.$slots.default.map(({ data: { attrs, scopedSlots } }) => {
+      return this.$slots.default
+      .filter(vnode => vnode.tag)  
+      .map(({ data: { attrs, scopedSlots } }) => {
           const column = {...attrs}
           if (scopedSlots) {
               // 自定义列模板
